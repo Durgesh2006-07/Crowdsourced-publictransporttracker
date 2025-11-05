@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crowdsourced Public Transport Tracker</title>
+  <link rel="stylesheet" href="style.css">
+
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet/dist/leaflet.css"
+  />
+</head>
+<body>
+
+ 
+  <nav class="navbar">
+    <div class="logo">🚍 Insight Tracker</div>
+    <div class="navcorner">
+    <ul class="nav-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#map">Live Map</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="#login">Login</a></li>
+    </ul>
+    </div>
+  </nav>
+
+
+  <section id="home" class="hero">
+    <div class="hero-content">
+      <h1>Crowdsourced Public Transport Tracker</h1>
+      <p>Track real-time buses and trains powered by commuter data. Fast, accurate, and free for everyone!</p>
+      <button class="btn-secondary" id="startDemo">Start Demo</button>
+    </div>
+  </section>
+
+  <section id="mapSection">
+    <h2 class="map-title">Live Map Simulation</h2>
+    <div id="map"></div>
+  </section>
+
+  <section id="features" class="container">
+    <h2>Why Choose Our Tracker?</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>🌍 Real-Time Tracking</h3>
+        <p>See live bus positions shared by fellow commuters instantly.</p>
+      </div>
+      <div class="card">
+        <h3>📱 Easy to Use</h3>
+        <p>Just open the app, select your route, and start tracking.</p>
+      </div>
+      <div class="card">
+        <h3>💰 Cost-Effective</h3>
+        <p>No GPS devices required — powered by users’ smartphones.</p>
+      </div>
+      <div class="card">
+        <h3>🧠 Smart Insights</h3>
+        <p>Data-driven insights to improve public transport efficiency.</p>
+      </div>
+    </div>
+  </section>
+
+
+  <footer id="contact">
+    <div class="footer-grid">
+      <div>
+        <h3>About</h3>
+        <p>Developed by and Team Insight Squad for Smart City Transport solutions.</p>
+      </div>
+      <div>
+        <h3>Contact</h3>
+        <p>Email: insight.squad@project.com <br>Phone: +91 98765 43210</p>
+      </div>
+      <div>
+        <h3>Follow Us</h3>
+        <p>🌐 Facebook | 🐦 Twitter | 📸 Instagram</p>
+      </div>
+    </div>
+    <p class="copyright">© 2025 Insight Squad | All rights reserved.</p>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
