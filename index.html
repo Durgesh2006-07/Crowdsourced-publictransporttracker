@@ -1,6 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>
+  if (localStorage.getItem("loggedIn") !== "true") {
+    window.location.replace("login.html");
+  }
+</script>
+
+
+<script>
+  if (localStorage.getItem("loggedIn") === "true") {
+    window.location.replace("index.html");
+  }
+</script>
+
+
+
+
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Crowdsourced Public Transport Tracker</title>
@@ -22,7 +39,8 @@
       <li><a href="#features">Features</a></li>
       <li><a href="#map">Live Map</a></li>
       <li><a href="#contact">Contact</a></li>
-      <li><a href="#login">Login</a></li>
+      <button class="route-btn" onclick="logout()">Logout</button>
+
     </ul>
     </div>
   </nav>
@@ -35,11 +53,48 @@
       <button class="btn-secondary" id="startDemo">Start Demo</button>
     </div>
   </section>
+  
+
 
   <section id="mapSection">
     <h2 class="map-title">Live Map Simulation</h2>
     <div id="map"></div>
+    <p style="font-size:12px;color:#666;margin-top:6px;">
+  * Demo mode: Bus locations are simulated for demonstration purposes.
+</p>
+
+    <div class="crowd-card">
+  <div class="crowd-item">
+    <span class="crowd-label">👥 Active Contributors</span>
+    <span id="contributors" class="crowd-value">0</span>
+  </div>
+  <div class="crowd-item">
+    <span class="crowd-label">📡 Last Update</span>
+    <span id="lastUpdate" class="crowd-value">--</span>
+  </div>
+  <div class="crowd-item">
+    <span class="crowd-label">🧠 Data Source</span>
+    <span class="crowd-value highlight">Crowdsourced GPS</span>
+  </div>
+</div>
+
   </section>
+
+<div class="route-control">
+  <span class="route-label">Filter Routes:</span>
+</div>
+
+<div class="legend-card">
+  <h3>🗺️ Route Legend</h3>
+  <div id="routeLegend"></div>
+</div>
+
+
+  <div class="status-panel">
+  <h3>Live Bus Status</h3>
+  <ul id="busStatus"></ul>
+</div>
+
 
   <section id="features" class="container">
     <h2>Why Choose Our Tracker?</h2>
@@ -84,5 +139,9 @@
 
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script src="script.js"></script>
+  <script src="auth.js"></script>
+
+
+
 </body>
 </html>

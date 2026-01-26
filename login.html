@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login | Insight Tracker</title>
+  <link rel="stylesheet" href="style.css">
+
+  <script>
+  if (localStorage.getItem("loggedIn") === "true") {
+    window.location.replace("index.html");
+  }
+</script>
+
+</head>
+<body class="login-body">
+
+<div class="login-card">
+  <h2>🚍 Insight Tracker</h2>
+  <p>Login to continue</p>
+
+  <input type="email" id="email" placeholder="Email">
+  <small id="emailError" class="error-text"></small>
+
+  <input type="password" id="password" placeholder="Password">
+  <small id="passwordError" class="error-text"></small>
+
+  <button onclick="login()">Login</button>
+
+  <p class="hint">Demo: test@gmail.com / 1234</p>
+</div>
+
+
+<script src="auth.js"></script>
+
+</body>
+</html>
