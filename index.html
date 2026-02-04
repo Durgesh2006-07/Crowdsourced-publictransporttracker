@@ -32,18 +32,17 @@
 
  
   <nav class="navbar">
-    <div class="logo">🚍 Insight Tracker</div>
-    <div class="navcorner">
-    <ul class="nav-links">
-      <li><a href="#home">Home</a></li>
-      <li><a href="#features">Features</a></li>
-      <li><a href="#map">Live Map</a></li>
-      <li><a href="#contact">Contact</a></li>
-      <button class="route-btn" onclick="logout()">Logout</button>
+  <div class="logo">🚍 Insight Tracker</div>
 
-    </ul>
-    </div>
-  </nav>
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#map">Live Map</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><button class="logout-btn" onclick="logout()">Logout</button></li>
+  </ul>
+</nav>
+
 
 
   <section id="home" class="hero">
@@ -95,6 +94,21 @@
   <ul id="busStatus"></ul>
 </div>
 
+<section class="container">
+  <h2>🤖 GenAI Transport Assistant</h2>
+
+  <div class="chat-box" id="chatBox">
+    <div class="bot-msg">
+      Hi 👋 Ask me about bus status or ETA.
+    </div>
+  </div>
+
+  <div class="chat-input">
+    <input type="text" id="chatInput" placeholder="Which bus is delayed?" />
+    <button onclick="sendChat()">Ask</button>
+  </div>
+</section>
+
 
   <section id="features" class="container">
     <h2>Why Choose Our Tracker?</h2>
@@ -118,6 +132,8 @@
     </div>
   </section>
 
+  
+
 
   <footer id="contact">
     <div class="footer-grid">
@@ -138,8 +154,13 @@
   </footer>
 
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <script src="script.js"></script>
-  <script src="auth.js"></script>
+
+<script src="script.js"></script>
+<script src="auth.js"></script>
+<script src="genai.js"></script>
+
+  
+
 
 
 

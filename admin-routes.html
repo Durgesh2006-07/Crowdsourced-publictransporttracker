@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Route Monitoring | Admin</title>
+  <link rel="stylesheet" href="style.css">
+
+  <script>
+    if (
+      localStorage.getItem("loggedIn") !== "true" ||
+      localStorage.getItem("userRole") !== "admin"
+    ) {
+      window.location.replace("login.html");
+    }
+  </script>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="logo">🚍 Insight Tracker – Admin</div>
+  <ul class="nav-links">
+    <li><a href="admin.html">Dashboard</a></li>
+    <li><a href="admin-routes.html">Routes</a></li>
+    <li><a href="admin-reports.html">Reports</a></li>
+    <button class="route-btn" onclick="logout()">Logout</button>
+  </ul>
+</nav>
+
+<section class="container">
+  <h2>Route Monitoring & Control</h2>
+
+  <div class="grid" id="adminRouteGrid">
+
+    <div class="card" data-bus="Bus 21 – RS Puram">
+      <h3>🚌 Bus 21 – RS Puram</h3>
+      <p>Status:
+        <span class="status-text status-ok">On Time</span>
+      </p>
+
+      <select class="status-select">
+        <option value="On Time">On Time</option>
+        <option value="Slight Delay">Slight Delay</option>
+        <option value="Delayed">Delayed</option>
+      </select>
+    </div>
+
+    <div class="card" data-bus="Bus 32 – Ukkadam">
+      <h3>🚌 Bus 32 – Ukkadam</h3>
+      <p>Status:
+        <span class="status-text status-ok">On Time</span>
+      </p>
+
+      <select class="status-select">
+        <option value="On Time">On Time</option>
+        <option value="Slight Delay">Slight Delay</option>
+        <option value="Delayed">Delayed</option>
+      </select>
+    </div>
+
+    <div class="card" data-bus="Bus 55 – Mettupalayam">
+      <h3>🚌 Bus 55 – Mettupalayam</h3>
+      <p>Status:
+        <span class="status-text status-ok">On Time</span>
+      </p>
+
+      <select class="status-select">
+        <option value="On Time">On Time</option>
+        <option value="Slight Delay">Slight Delay</option>
+        <option value="Delayed">Delayed</option>
+      </select>
+    </div>
+
+  </div>
+</section>
+
+<script src="admin-control.js"></script>
+
+
+<script src="auth.js"></script>
+<script>
+  checkAdminAuth();
+</script>
+
+</body>
+</html>

@@ -3,10 +3,17 @@ document.addEventListener("DOMContentLoaded", () => {
   /* =======================
      MAP INITIALIZATION
   ======================== */
-  const map = L.map("map").setView([11.0168, 76.9558], 12);
+  const map = L.map("map", {
+    zoomControl: false   // disable default zoom
+  }).setView([11.0168, 76.9558], 12);
 
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution: "© OpenStreetMap contributors",
+  }).addTo(map);
+
+  // Add zoom control INSIDE map
+  L.control.zoom({
+    position: "topleft"
   }).addTo(map);
 
   /* =======================
@@ -27,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* =======================
-     BUS DATA (5 ROUTES)
+     BUS DATA
   ======================== */
   const buses = [
     {
@@ -75,8 +82,6 @@ document.addEventListener("DOMContentLoaded", () => {
     bus.marker = L.marker(bus.route[0], {
       icon: busIcon(bus.color)
     }).addTo(map);
-
-    bus.index = 0;
   });
 
   map.fitBounds(buses.flatMap(b => b.route));
@@ -101,11 +106,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* =======================
-     LIVE BUS STATUS (DESKTOP)
+     LIVE STATUS PANEL
   ======================== */
   function updateLiveStatus(bus) {
-    const statusPanel = document.getElementById("busStatus");
-    statusPanel.innerHTML = `
+    document.getElementById("busStatus").innerHTML = `
       <li>
         🚌 <b>${bus.name}</b><br>
         ⏱ ETA: <b>${calculateETA(bus)}</b><br>
@@ -115,80 +119,63 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* =======================
-     FILTER ROUTES
+     ROUTE FILTER BUTTONS
   ======================== */
- /* =======================
-   FILTER ROUTES (FIXED)
-======================= */
-const routeControl = document.querySelector(".route-control");
+  const routeControl = document.querySelector(".route-control");
 
-// Create "All" button
-const allBtn = document.createElement("button");
-allBtn.textContent = "All";
-allBtn.className = "route-btn active";
-allBtn.dataset.route = "all";
-routeControl.appendChild(allBtn);
+  const allBtn = document.createElement("button");
+  allBtn.textContent = "All";
+  allBtn.className = "route-btn active";
+  allBtn.dataset.route = "all";
+  routeControl.appendChild(allBtn);
 
-// Create buttons for each bus
-buses.forEach((bus, index) => {
-  const btn = document.createElement("button");
-  btn.textContent = bus.name.split(" ")[1]; // Bus number
-  btn.className = "route-btn";
-  btn.dataset.route = index;
-  routeControl.appendChild(btn);
-});
-
-// Click logic
-const routeButtons = document.querySelectorAll(".route-btn");
-
-routeButtons.forEach(btn => {
-  btn.addEventListener("click", () => {
-
-    // Active state UI
-    routeButtons.forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-
-    const selected = btn.dataset.route;
-
-    if (selected === "all") {
-      // ✅ SHOW ALL ROUTES AGAIN
-      buses.forEach(bus => {
-        if (!map.hasLayer(bus.polyline)) bus.polyline.addTo(map);
-        if (!map.hasLayer(bus.marker)) bus.marker.addTo(map);
-      });
-
-      // Optional: clear live status
-      updateLiveStatus(buses[0]);
-
-    } else {
-      // ✅ SHOW ONLY SELECTED ROUTE
-      buses.forEach((bus, index) => {
-        if (index == selected) {
-          if (!map.hasLayer(bus.polyline)) bus.polyline.addTo(map);
-          if (!map.hasLayer(bus.marker)) bus.marker.addTo(map);
-          updateLiveStatus(bus);
-        } else {
-          if (map.hasLayer(bus.polyline)) map.removeLayer(bus.polyline);
-          if (map.hasLayer(bus.marker)) map.removeLayer(bus.marker);
-        }
-      });
-    }
+  buses.forEach((bus, index) => {
+    const btn = document.createElement("button");
+    btn.textContent = bus.name.split(" ")[1];
+    btn.className = "route-btn";
+    btn.dataset.route = index;
+    routeControl.appendChild(btn);
   });
-});
+
+  const routeButtons = document.querySelectorAll(".route-btn");
+
+  routeButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+
+      routeButtons.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+
+      const selected = btn.dataset.route;
+
+      if (selected === "all") {
+        buses.forEach(bus => {
+          bus.polyline.addTo(map);
+          bus.marker.addTo(map);
+        });
+        updateLiveStatus(buses[0]);
+      } else {
+        buses.forEach((bus, index) => {
+          if (index == selected) {
+            bus.polyline.addTo(map);
+            bus.marker.addTo(map);
+            updateLiveStatus(bus);
+          } else {
+            map.removeLayer(bus.polyline);
+            map.removeLayer(bus.marker);
+          }
+        });
+      }
+    });
+  });
 
   /* =======================
-     BUS ANIMATION
+     BUS MOVEMENT (DEMO)
   ======================== */
   function moveBuses() {
     buses.forEach(bus => {
-      const next = bus.route[bus.index + 1];
-      if (!next) {
-        bus.index = 0;
-        bus.marker.setLatLng(bus.route[0]);
-        return;
-      }
-
+      const next = bus.route[1];
       const pos = bus.marker.getLatLng();
+
       bus.marker.setLatLng([
         pos.lat + (next[0] - pos.lat) * bus.speed,
         pos.lng + (next[1] - pos.lng) * bus.speed
@@ -198,15 +185,41 @@ routeButtons.forEach(btn => {
   }
   moveBuses();
 
-  /* =======================
-     DEMO BUTTON
-  ======================== */
-  document.getElementById("startDemo").onclick = () => {
-    updateLiveStatus(buses[0]);
-    buses[0].marker.openPopup();
-  };
-
-  // Default status on load
   updateLiveStatus(buses[0]);
-
 });
+
+/* =======================
+   GENAI CHAT
+======================= */
+function sendChat() {
+  const input = document.getElementById("chatInput");
+  const chatBox = document.getElementById("chatBox");
+
+  const msg = input.value.trim();
+  if (!msg) return;
+
+  chatBox.innerHTML += `<div class="user-msg">${msg}</div>`;
+
+  const typing = document.createElement("div");
+  typing.className = "bot-msg typing";
+  typing.innerHTML = "🤖 AI is typing<span class='dots'></span>";
+  chatBox.appendChild(typing);
+
+  fetch("http://127.0.0.1:5000/chat", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message: msg })
+  })
+    .then(res => res.json())
+    .then(data => {
+      typing.remove();
+      chatBox.innerHTML += `<div class="bot-msg">${data.reply}</div>`;
+      chatBox.scrollTop = chatBox.scrollHeight;
+    })
+    .catch(() => {
+      typing.remove();
+      chatBox.innerHTML += `<div class="bot-msg">AI service unavailable</div>`;
+    });
+
+  input.value = "";
+}

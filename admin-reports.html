@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Reports | Admin</title>
+  <link rel="stylesheet" href="style.css">
+
+  <script>
+    if (
+      localStorage.getItem("loggedIn") !== "true" ||
+      localStorage.getItem("userRole") !== "admin"
+    ) {
+      window.location.replace("login.html");
+    }
+  </script>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="logo">🚍 Insight Tracker – Admin</div>
+  <ul class="nav-links">
+    <li><a href="admin.html">Dashboard</a></li>
+    <li><a href="admin-routes.html">Routes</a></li>
+    <li><a href="admin-reports.html">Reports</a></li>
+    <button class="route-btn" onclick="logout()">Logout</button>
+  </ul>
+</nav>
+
+<section class="container">
+  <h2>Reports & Analytics</h2>
+
+  <!-- KPI SUMMARY -->
+  <div class="grid">
+    <div class="card">
+      <h3>🚌 Total Active Buses</h3>
+      <p><b>5</b></p>
+      <small>Today</small>
+    </div>
+
+    <div class="card">
+      <h3>👥 Avg Daily Contributors</h3>
+      <p><b>142</b></p>
+      <small>Last 7 days</small>
+    </div>
+
+    <div class="card">
+      <h3>🚦 Delay Incidents</h3>
+      <p><b>9</b></p>
+      <small>This week</small>
+    </div>
+
+    <div class="card">
+      <h3>⏱ Avg Delay Time</h3>
+      <p><b>7 mins</b></p>
+      <small>Peak hours</small>
+    </div>
+  </div>
+
+  <!-- DELAY REPORT -->
+  <div class="card" style="margin-top:30px;">
+    <h3>🚦 Delay Frequency Report</h3>
+
+    <table class="admin-table">
+      <tr>
+        <th>Bus Route</th>
+        <th>Delay Count</th>
+        <th>Peak Time</th>
+      </tr>
+      <tr>
+        <td>Bus 55 – Mettupalayam</td>
+        <td>4</td>
+        <td>8:30 – 9:30 AM</td>
+      </tr>
+      <tr>
+        <td>Bus 32 – Ukkadam</td>
+        <td>3</td>
+        <td>6:00 – 7:00 PM</td>
+      </tr>
+      <tr>
+        <td>Bus 21 – RS Puram</td>
+        <td>2</td>
+        <td>9:00 – 10:00 AM</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- CROWD REPORT -->
+  <div class="card" style="margin-top:30px;">
+    <h3>👥 Crowd Density Analysis</h3>
+
+    <table class="admin-table">
+      <tr>
+        <th>Route</th>
+        <th>Avg Crowd</th>
+        <th>Status</th>
+      </tr>
+      <tr>
+        <td>City Center Routes</td>
+        <td>High</td>
+        <td class="status-bad">Overcrowded</td>
+      </tr>
+      <tr>
+        <td>Suburban Routes</td>
+        <td>Medium</td>
+        <td class="status-warn">Manageable</td>
+      </tr>
+      <tr>
+        <td>Outer Routes</td>
+        <td>Low</td>
+        <td class="status-ok">Normal</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- AI INSIGHTS -->
+  <div class="card" style="margin-top:30px;">
+    <h3>🧠 AI-Generated Insights</h3>
+    <ul class="ai-list">
+      <li>📈 Increase bus frequency on Route 55 during morning peak hours.</li>
+      <li>🕒 Redistribute buses from low-crowd routes after 11 AM.</li>
+      <li>🚦 Delay patterns indicate congestion near city junctions.</li>
+      <li>👥 Crowd data suggests need for weekend schedule adjustment.</li>
+    </ul>
+  </div>
+</section>
+
+
+<script src="auth.js"></script>
+<script>
+  checkAdminAuth();
+</script>
+
+</body>
+</html>

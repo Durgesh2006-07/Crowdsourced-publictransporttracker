@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard | Insight Tracker</title>
+  <link rel="stylesheet" href="style.css">
+
+  <script>
+    if (
+      localStorage.getItem("loggedIn") !== "true" ||
+      localStorage.getItem("userRole") !== "admin"
+    ) {
+      window.location.replace("login.html");
+    }
+  </script>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="logo">🚍 Insight Tracker – Admin</div>
+  <ul class="nav-links">
+    <li><a href="admin-routes.html">Routes</a></li>
+    <li><a href="admin-reports.html">Reports</a></li>
+    <button class="route-btn" onclick="logout()">Logout</button>
+  </ul>
+</nav>
+
+<section class="container">
+  <h2>Admin Dashboard</h2>
+
+  <!-- KPI CARDS -->
+  <div class="grid">
+    <div class="card">
+      <h3>🚌 Active Buses</h3>
+      <p><b id="busCount">5</b></p>
+      <small>Currently running</small>
+    </div>
+
+    <div class="card">
+      <h3>🚦 Delayed Buses</h3>
+      <p><b id="delayCount">0</b></p>
+      <small>Needs attention</small>
+    </div>
+
+    <div class="card">
+      <h3>👥 Active Contributors</h3>
+      <p><b>142</b></p>
+      <small>Today</small>
+    </div>
+
+    <div class="card">
+      <h3>🧠 System Health</h3>
+      <p id="systemHealth" class="status-ok">Normal</p>
+      <small>AI monitored</small>
+    </div>
+  </div>
+
+  <!-- ALERTS -->
+  <div class="card" style="margin-top:30px;">
+    <h3>⚠️ Recent Alerts</h3>
+    <ul id="alertList">
+      <li>No critical alerts</li>
+    </ul>
+  </div>
+</section>
+
+<script src="admin-dashboard.js"></script>
+
+<script src="auth.js"></script>
+<script>
+  checkAdminAuth();
+</script>
+
+</body>
+</html>
