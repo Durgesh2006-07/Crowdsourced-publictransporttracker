@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Login | Insight Tracker</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+<script>
+if (localStorage.getItem("loggedIn") === "true") {
+  window.location.replace("/index");
+}
+</script>
+
+</head>
+
+<body class="login-body">
+
+<div class="login-card">
+
+<h2>🚍 Insight Tracker</h2>
+<p>Login to continue</p>
+
+<input type="email" id="email" placeholder="Email">
+<small id="emailError" class="error-text"></small>
+
+<input type="password" id="password" placeholder="Password">
+<small id="passwordError" class="error-text"></small>
+
+<div class="role-select">
+
+<label class="role-option">
+<input type="radio" name="role" value="consumer" checked>
+<span>Consumer</span>
+</label>
+
+<label class="role-option">
+<input type="radio" name="role" value="admin">
+<span>Authority / Admin</span>
+</label>
+
+</div>
+
+<button onclick="login()">Login</button>
+
+<p class="hint">
+Don't have an account?
+<a href="/signup-page">Signup</a>
+</p>
+
+</div>
+
+<script src="{{ url_for('static', filename='auth.js') }}"></script>
+
+</body>
+</html>

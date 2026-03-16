@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<title>Signup | Insight Tracker</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body class="login-body">
+
+<div class="login-card">
+
+<h2>Create Account</h2>
+<p>Signup to use Insight Tracker</p>
+
+<input type="text" id="name" placeholder="Name">
+<input type="email" id="email" placeholder="Email">
+<input type="password" id="password" placeholder="Password">
+
+<button onclick="signup()">Signup</button>
+
+<p class="hint">
+Already have an account?
+<a href="/">Login</a>
+</p>
+
+</div>
+
+<script src="{{ url_for('static', filename='auth.js') }}"></script>
+
+</body>
+
+</html>

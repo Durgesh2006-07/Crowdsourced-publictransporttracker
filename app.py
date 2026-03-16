@@ -1,58 +1,118 @@
-from flask import Flask, request, jsonify
+from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
-from dotenv import load_dotenv
-import os
-from google import genai
+import mysql.connector
 
-# Load environment variables
-load_dotenv()
-
-# Flask app
 app = Flask(__name__)
 CORS(app)
 
-# Initialize Gemini client (NEW SDK)
-client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+# ---------------- DATABASE CONNECTION ---------------- #
 
-# Simulated bus data (context for AI)
-BUS_DATA = """
-Bus 21 – RS Puram: On Time, ETA 6 mins
-Bus 32 – Ukkadam: Slight Delay, ETA 10 mins
-Bus 55 – Mettupalayam: On Time, ETA 8 mins
-Bus 73 – KGiSL: Slow due to traffic, ETA 14 mins
-Bus 88 – Singanallur: On Time, ETA 7 mins
-"""
+db = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password="Kgkite@123",
+    database="transport_tracker"
+)
+
+cursor = db.cursor(dictionary=True)
+
+# ---------------- PAGE ROUTES ---------------- #
+
+@app.route("/")
+def login_page():
+    return render_template("login.html")
+
+@app.route("/index")
+def index_page():
+    return render_template("index.html")
+
+@app.route("/signup-page")
+def signup_page():
+    return render_template("signup.html")
+
+@app.route("/admin")
+def admin_page():
+    return render_template("admin.html")
+
+@app.route("/admin-routes")
+def admin_routes():
+    return render_template("admin-routes.html")
+
+# ---------------- USER SIGNUP ---------------- #
+
+@app.route("/signup", methods=["POST"])
+def signup():
+
+    data = request.json
+
+    email = data["email"]
+    password = data["password"]
+
+    query = """
+    INSERT INTO users (email,password,role)
+    VALUES (%s,%s,'consumer')
+    """
+
+    cursor.execute(query,(email,password))
+    db.commit()
+
+    return jsonify({
+        "success": True,
+        "message": "User created successfully"
+    })
+
+
+# ---------------- USER LOGIN ---------------- #
+
+@app.route("/login", methods=["POST"])
+def login():
+
+    data = request.json
+    email = data["email"]
+    password = data["password"]
+
+    query = "SELECT role FROM users WHERE email=%s AND password=%s"
+    cursor.execute(query, (email, password))
+
+    user = cursor.fetchone()
+
+    if user:
+        return jsonify({
+            "success": True,
+            "role": user["role"]
+        })
+    else:
+        return jsonify({
+            "success": False,
+            "message": "Invalid email or password"
+        })
+
+
+# ---------------- AI BUS CHAT ---------------- #
 
 @app.route("/chat", methods=["POST"])
 def chat():
-    try:
-        data = request.get_json()
-        user_msg = data.get("message", "")
 
-        if not user_msg:
-            return jsonify({"reply": "Please ask a question about buses."})
+    msg = request.json["message"]
 
-        prompt = f"""
-You are an AI public transport assistant.
+    msg = msg.lower()
 
-Use ONLY the following bus data to answer:
-{BUS_DATA}
+    if "delay" in msg:
+        reply = "Bus 21 is slightly delayed due to traffic."
 
-User question:
-{user_msg}
-"""
+    elif "eta" in msg:
+        reply = "Bus 32 will arrive in 5 minutes."
 
-        response = client.models.generate_content(
-            model="gemini-3-flash-preview",
-            contents=prompt
-        )
+    elif "route" in msg:
+        reply = "Bus 55 goes from Gandhipuram to Mettupalayam."
 
-        return jsonify({"reply": response.text})
+    else:
+        reply = "Ask about bus delay, ETA or routes."
 
-    except Exception as e:
-        print("🔥 GEMINI ERROR:", e)
-        return jsonify({"reply": "AI service unavailable"}), 500
+    return jsonify({"reply": reply})
 
+
+# ---------------- START SERVER ---------------- #
 
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=5000, debug=True)
+    app.run(debug=True)

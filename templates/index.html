@@ -2,17 +2,13 @@
 <html lang="en">
 <head>
 <script>
-  if (localStorage.getItem("loggedIn") !== "true") {
-    window.location.replace("login.html");
-  }
-</script>
+if (localStorage.getItem("loggedIn") !== "true") {
+  window.location.replace("/");
+}
+</script> 
 
 
-<script>
-  if (localStorage.getItem("loggedIn") === "true") {
-    window.location.replace("index.html");
-  }
-</script>
+
 
 
 
@@ -21,7 +17,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Crowdsourced Public Transport Tracker</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
   <link
     rel="stylesheet"
@@ -49,7 +45,6 @@
     <div class="hero-content">
       <h1>Crowdsourced Public Transport Tracker</h1>
       <p>Track real-time buses and trains powered by commuter data. Fast, accurate, and free for everyone!</p>
-      <button class="btn-secondary" id="startDemo">Start Demo</button>
     </div>
   </section>
   
@@ -155,9 +150,9 @@
 
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
-<script src="script.js"></script>
-<script src="auth.js"></script>
-<script src="genai.js"></script>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+<script src="{{ url_for('static', filename='auth.js') }}"></script>
+<script src="{{ url_for('static', filename='genai.js') }}"></script>
 
   
 
