@@ -3,80 +3,110 @@
 <head>
   <meta charset="UTF-8">
   <title>Route Monitoring | Admin</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
+  <link rel="stylesheet" href="{{ url_for('static', filename='admin-routes.css') }}">
+
+  <!-- 🔐 ADMIN AUTH CHECK -->
   <script>
     if (
       localStorage.getItem("loggedIn") !== "true" ||
       localStorage.getItem("userRole") !== "admin"
     ) {
-      window.location.replace("login.html");
+      window.location.replace("/");
     }
   </script>
 </head>
+
 <body>
+
+<!-- ================= NAVBAR ================= -->
 
 <nav class="navbar">
   <div class="logo">🚍 Insight Tracker – Admin</div>
+
   <ul class="nav-links">
-    <li><a href="admin.html">Dashboard</a></li>
-    <li><a href="admin-routes.html">Routes</a></li>
-    <li><a href="admin-reports.html">Reports</a></li>
-    <button class="route-btn" onclick="logout()">Logout</button>
+    <li><a href="/admin">Dashboard</a></li>
+    <li><a href="/admin-routes">Routes</a></li>
+    <li><a href="/admin-reports">Reports</a></li>
+
+    <li>
+      <button class="route-btn" onclick="logout()">Logout</button>
+    </li>
   </ul>
 </nav>
 
+<!-- ================= MAIN CONTENT ================= -->
+
 <section class="container">
+
   <h2>Route Monitoring & Control</h2>
+
+  <!-- ========= ADD ROUTE FORM ========= -->
+
+  <div class="card">
+    <h3>Add New Route</h3>
+
+    <form method="POST" action="/admin/add-route" class="route-form">
+
+      <input type="text" name="source" placeholder="Source" required>
+
+      <input type="text" name="destination" placeholder="Destination" required>
+
+      <input type="text" name="timing" placeholder="Timing (e.g. 10:30 AM)">
+
+      <select name="status">
+        <option value="On Time">On Time</option>
+        <option value="Slight Delay">Slight Delay</option>
+        <option value="Delayed">Delayed</option>
+      </select>
+
+      <button type="submit" class="route-btn">Add Route</button>
+
+    </form>
+  </div>
+
+  <!-- ========= ROUTES FROM DATABASE ========= -->
 
   <div class="grid" id="adminRouteGrid">
 
-    <div class="card" data-bus="Bus 21 – RS Puram">
-      <h3>🚌 Bus 21 – RS Puram</h3>
-      <p>Status:
-        <span class="status-text status-ok">On Time</span>
-      </p>
+    {% if routes %}
 
-      <select class="status-select">
-        <option value="On Time">On Time</option>
-        <option value="Slight Delay">Slight Delay</option>
-        <option value="Delayed">Delayed</option>
-      </select>
-    </div>
+      {% for r in routes %}
 
-    <div class="card" data-bus="Bus 32 – Ukkadam">
-      <h3>🚌 Bus 32 – Ukkadam</h3>
-      <p>Status:
-        <span class="status-text status-ok">On Time</span>
-      </p>
+      <div class="card">
 
-      <select class="status-select">
-        <option value="On Time">On Time</option>
-        <option value="Slight Delay">Slight Delay</option>
-        <option value="Delayed">Delayed</option>
-      </select>
-    </div>
+        <h3>🚌 {{ r.source }} → {{ r.destination }}</h3>
 
-    <div class="card" data-bus="Bus 55 – Mettupalayam">
-      <h3>🚌 Bus 55 – Mettupalayam</h3>
-      <p>Status:
-        <span class="status-text status-ok">On Time</span>
-      </p>
+        <p><strong>Timing:</strong> {{ r.timing }}</p>
 
-      <select class="status-select">
-        <option value="On Time">On Time</option>
-        <option value="Slight Delay">Slight Delay</option>
-        <option value="Delayed">Delayed</option>
-      </select>
-    </div>
+        <p>
+          <strong>Status:</strong>
+          <span class="status-text">{{ r.status }}</span>
+        </p>
+
+      </div>
+
+      {% endfor %}
+
+    {% else %}
+
+      <p>No routes added yet.</p>
+
+    {% endif %}
 
   </div>
+
 </section>
 
-<script src="{{ url_for('static', filename='admin-dashboard.js') }}"></script>
+<!-- ================= SCRIPTS ================= -->
+
 <script src="{{ url_for('static', filename='auth.js') }}"></script>
+
 <script>
-  checkAdminAuth();
+  function logout() {
+    localStorage.clear();
+    window.location.href = "/";
+  }
 </script>
 
 </body>

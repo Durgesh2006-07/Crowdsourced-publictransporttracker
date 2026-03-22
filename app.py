@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect
 from flask_cors import CORS
 import mysql.connector
 
@@ -34,9 +34,42 @@ def signup_page():
 def admin_page():
     return render_template("admin.html")
 
+@app.route("/admin-reports")
+def admin_reports():
+    return render_template("admin-reports.html")
+
+# ⭐ ADMIN ROUTES PAGE — FETCH DATA FROM DB
 @app.route("/admin-routes")
 def admin_routes():
-    return render_template("admin-routes.html")
+
+    query = "SELECT * FROM routes"
+    cursor.execute(query)
+
+    routes = cursor.fetchall()
+
+    return render_template("admin-routes.html", routes=routes)
+
+
+# ---------------- ADMIN ADD ROUTE ---------------- #
+
+@app.route("/admin/add-route", methods=["POST"])
+def add_route():
+
+    source = request.form["source"]
+    destination = request.form["destination"]
+    timing = request.form["timing"]
+    status = request.form["status"]
+
+    query = """
+    INSERT INTO routes (source, destination, timing, status)
+    VALUES (%s,%s,%s,%s)
+    """
+
+    cursor.execute(query, (source, destination, timing, status))
+    db.commit()
+
+    return redirect("/admin-routes")
+
 
 # ---------------- USER SIGNUP ---------------- #
 
@@ -49,11 +82,11 @@ def signup():
     password = data["password"]
 
     query = """
-    INSERT INTO users (email,password,role)
-    VALUES (%s,%s,'consumer')
+    INSERT INTO users (email, password, role)
+    VALUES (%s, %s, 'consumer')
     """
 
-    cursor.execute(query,(email,password))
+    cursor.execute(query, (email, password))
     db.commit()
 
     return jsonify({
@@ -93,9 +126,7 @@ def login():
 @app.route("/chat", methods=["POST"])
 def chat():
 
-    msg = request.json["message"]
-
-    msg = msg.lower()
+    msg = request.json["message"].lower()
 
     if "delay" in msg:
         reply = "Bus 21 is slightly delayed due to traffic."
